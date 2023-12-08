@@ -6,4 +6,21 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.25">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
+        <UpToDateCheckBuilt Include="wwwroot/css/site.css" Set="Css"/>
+        <UpToDateCheckBuilt Include="postcss.config.js" Set="Css"/>
+        <UpToDateCheckBuilt Include="tailwind.config.js" Set="Css"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Data\Migrations\" />
+      <Folder Include="wwwroot\lib\" />
+    </ItemGroup>
+
 </Project>
