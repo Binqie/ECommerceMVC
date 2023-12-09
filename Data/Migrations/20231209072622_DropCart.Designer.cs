@@ -3,6 +3,7 @@ using System;
 using ECommerceMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerceMVC.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20231209072622_DropCart")]
+    partial class DropCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,8 +62,6 @@ namespace ECommerceMVC.Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -125,52 +125,6 @@ namespace ECommerceMVC.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OrdersId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderProduct");
-                });
-
-            modelBuilder.Entity("ECommerceMVC.Entities.Order", b =>
-                {
-                    b.HasOne("ECommerceMVC.Entities.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("ECommerceMVC.Entities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ECommerceMVC.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ECommerceMVC.Entities.User", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

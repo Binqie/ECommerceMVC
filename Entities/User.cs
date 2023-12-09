@@ -12,4 +12,6 @@ public class User
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    public List<Order> Orders { get; set; } = new List<Order>();
 }
