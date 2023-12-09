@@ -1,0 +1,15 @@
+﻿@model List<ECommerceMVC.Models.UserResponse>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div>
+    <ul>
+        @foreach (var user in Model)
+        {
+            <li>@user.Name</li>
+        }
+    </ul>
+</div>

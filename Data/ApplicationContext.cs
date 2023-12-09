@@ -5,13 +5,23 @@ namespace ECommerceMVC.Data;
 
 public class ApplicationContext : DbContext
 {
-    private DbSet<User> Users { get; set; } = null!;
-    private DbSet<Order> Orders { get; set; } = null!;
-    private DbSet<Product> Products { get; set; } = null!;
-    private DbSet<Category> Categories { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<Product> Products { get; set; } = null!;
+    public DbSet<Category> Categories { get; set; } = null!;
     
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
         Database.EnsureCreated();
+    }
+    
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+        builder.Entity<User>()
+            .HasIndex(u => u.Username)
+            .IsUnique();
     }
 }
