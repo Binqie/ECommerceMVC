@@ -12,10 +12,12 @@ namespace ECommerceMVC.Services;
 public class UserService
 {
     private readonly ApplicationContext _db;
+    private readonly JwtService _JwtService;
 
-    public UserService(ApplicationContext dbContext)
+    public UserService(ApplicationContext dbContext, JwtService JwtService)
     {
         _db = dbContext;
+        _JwtService = JwtService;
     }
 
     public async Task<List<UserResponse>> GetAllUsers()
@@ -125,14 +127,15 @@ public class UserService
         return deletedUser;
     }
 
-    // public async Task<UserResponse> SignInAsync(LoginRequest userData)
-    // {
-    //     var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == userData.Email);
-    //     if (user is null)
-    //     {
-    //         throw new Exception("User does not exist!");
-    //     }
-    //     
-    //     
-    // }
+    public Token SignInAsync(LoginRequest userData)
+    {
+        if (!_db.Users.Any(u => u.Email == userData.Email))
+        {
+            throw new Exception("User does not exist!");
+        }
+        
+        var token = _JwtService.Authenticate(userData);
+
+        return token;
+    }
 }
