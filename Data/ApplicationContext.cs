@@ -12,6 +12,7 @@ public class ApplicationContext : DbContext
     
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         Database.EnsureCreated();
     }
     

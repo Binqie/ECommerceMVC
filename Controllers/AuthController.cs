@@ -26,6 +26,12 @@ public class AuthController : Controller
         return _userService.CreateUserAsync(userData);
     }
     
+    [HttpGet]
+    public IActionResult SignIn()
+    {
+        return View();
+    }
+    
     [HttpPost]
     public IActionResult SignIn(LoginRequest userData)
     {
