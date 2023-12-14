@@ -26,7 +26,7 @@ public class AuthController : Controller
     {
         var user = _userService.CreateUserAsync(userData);
 
-        if (user is null)
+        if (user is not null)
         {
             ViewBag.Error = "User with this Email does already exist";
             return View();
