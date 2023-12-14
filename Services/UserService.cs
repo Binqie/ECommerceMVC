@@ -44,16 +44,16 @@ public class UserService
             Username = u.Username,
             CreatedAt = u.CreatedAt
         }).FirstOrDefaultAsync(u => u.Id == id);
-        
+
         return user;
     }
-    
-    public async Task<UserResponse> CreateUserAsync(CreateUserRequest userData)
+
+    public async Task<UserResponse?> CreateUserAsync(CreateUserRequest userData)
     {
         var user = _db.Users.FirstOrDefault(u => u.Email == userData.Email || u.Username == userData.Username);
         if (user is not null)
         {
-            throw new ValidationException("User with this Email of Username does already exist!");
+            return null;
         }
 
         User newUser = new User()
@@ -120,21 +120,30 @@ public class UserService
             Username = user.Username,
             CreatedAt = user.CreatedAt
         };
-        
+
         _db.Users.Remove(user);
         await _db.SaveChangesAsync();
 
         return deletedUser;
     }
 
-    public Token SignInAsync(LoginRequest userData)
+    public async Task<Token?> SignInAsync(LoginRequest userData)
     {
-        if (!_db.Users.Any(u => u.Email == userData.Email))
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == userData.Email);
+
+        if (user is null)
         {
-            throw new Exception("User does not exist!");
+            return null;
         }
-        
-        var token = _JwtService.Authenticate(userData);
+
+        var isPasswordValid = BCrypt.Net.BCrypt.Verify(userData.Password, user.Password);
+
+        if (!isPasswordValid)
+        {
+            return null;
+        }
+
+        Token token = _JwtService.Authenticate(userData);
 
         return token;
     }

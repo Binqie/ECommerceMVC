@@ -17,31 +17,43 @@ public class AuthController : Controller
     [HttpGet]
     public IActionResult SignUp()
     {
+        ViewBag.Error = null;
         return View();
     }
     
     [HttpPost]
-    public Task SignUp(CreateUserRequest userData)
+    public IActionResult SignUp(CreateUserRequest userData)
     {
-        return _userService.CreateUserAsync(userData);
+        var user = _userService.CreateUserAsync(userData);
+
+        if (user is null)
+        {
+            ViewBag.Error = "User with this Email does already exist";
+            return View();
+        }
+
+        return RedirectToAction("SignIn");
     }
     
     [HttpGet]
     public IActionResult SignIn()
     {
+        ViewBag.Error = null;
         return View();
     }
     
     [HttpPost]
-    public IActionResult SignIn(LoginRequest userData)
+    public async Task<IActionResult> SignIn(LoginRequest userData)
     {
-        var token = _userService.SignInAsync(userData);
+        var token = await _userService.SignInAsync(userData);
 
         if (token is null)
         {
-            return Unauthorized();
+            Console.WriteLine($"token: {token}");
+            ViewBag.Error = "Email or Password is incorrect";
+            return View();
         }
 
-        return Ok(token);
+        return RedirectToAction("Index", "Home");
     }
 }

@@ -16,4 +16,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Sign In</button>
     </form>
+    @if (ViewBag.Error is not null)
+    {
+        <div>
+            <p>@ViewBag.Error</p>
+        </div>
+    }
 </div>

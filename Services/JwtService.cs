@@ -25,13 +25,7 @@ public class JwtService : IJWTService
         _db = db;
     }
     public Token Authenticate(LoginRequest userData)
-    {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userData.Password);
-        
-        if (!_db.Users.Any(u => u.Email == userData.Email && u.Password == hashedPassword)) {
-            return null;
-        }
-            
+    {      
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenKey = Encoding.UTF8.GetBytes(_configuration["JWT:Key"]);
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -43,6 +37,7 @@ public class JwtService : IJWTService
             Expires = DateTime.UtcNow.AddMinutes(10),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.HmacSha256Signature)
         };
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return new Token { AccessToken = tokenHandler.WriteToken(token) };
 
